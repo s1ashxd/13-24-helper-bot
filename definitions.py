@@ -5,4 +5,4 @@ LESSON_TYPES = {
     'ПР': 'Семинар',
     'ЛК': 'Лекция'
 }
-UNIVERSITY_GROUP = 'ИКБО-01-21'
+UNIVERSITY_GROUP = 'ИКБО-13-24'
