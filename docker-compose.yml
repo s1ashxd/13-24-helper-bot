@@ -1,0 +1,17 @@
+services:
+  redis:
+    image: redis
+    command:
+      - redis-server
+    env_file:
+      - .env
+    restart: on-failure
+    ports:
+      - "6379:6379"
+  bot:
+    build: .
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - redis
