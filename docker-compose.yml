@@ -1,5 +1,5 @@
 services:
-  redis:
+  redis-server:
     image: redis
     command:
       - redis-server
@@ -7,11 +7,22 @@ services:
       - .env
     restart: on-failure
     ports:
-      - "6379:6379"
+      - ":6379"
+  mariadb-server:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MARIADB_PASSWORD}
+    env_file:
+      - .env
+    restart: on-failure
+    ports:
+      - "3306:3306"
   bot:
     build: .
     env_file:
       - .env
-    restart: always
+    restart: no
     depends_on:
-      - redis
+      - redis-server
+      - mariadb-server
+

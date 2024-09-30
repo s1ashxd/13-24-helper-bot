@@ -1,23 +1,21 @@
-from datetime import datetime
+from datetime import timedelta, datetime
 
 from aiogram import Bot
-from httpx import AsyncClient
+from aiomysql import Pool
 
-from app.utils.schedule_utils import get_current_week, get_daily_schedule
+from app.utils.schedule_utils import get_daily_schedule
 
 
-async def notify_cron_task(bot: Bot, api_client: AsyncClient, chat_id: int, morning_cron: bool):
-    week = await get_current_week(api_client)
-    if week is None:
-        await bot.send_message(chat_id, 'Во время выполнения cron-задачи произошла ошибка API')
-        return
-    weekday = datetime.today().weekday()
+async def notify_cron_task(
+        bot: Bot,
+        chat_id: int,
+        morning_cron: bool,
+        database_pool: Pool,
+        thread_id: int,
+):
+    day = datetime.now()
     if not morning_cron:
-        weekday += 1
-    raw = await get_daily_schedule(
-        api_client,
-        week,
-        weekday
-    )
-    if raw is not None:
-        await bot.send_message(chat_id, raw)
+        day += timedelta(days=1)
+    raw = await get_daily_schedule(database_pool, day)
+    if len(raw) > 0:
+        await bot.send_message(chat_id, raw, message_thread_id=thread_id or None)

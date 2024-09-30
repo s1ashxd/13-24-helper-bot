@@ -4,3 +4,6 @@ APScheduler~=3.10.4
 python-dotenv~=1.0.1
 redis~=5.0.8
 apscheduler_di~=0.1.0
+icalendar~=5.0.13
+aiomysql~=0.2.0
+cryptography~=43.0.1
