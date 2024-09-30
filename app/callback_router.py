@@ -33,7 +33,7 @@ async def handle_back_callback(callback: CallbackQuery):
 @callback_router.callback_query(F.data == 'today_schedule')
 @callback_router.callback_query(F.data == 'tomorrow_schedule')
 async def handle_daily_schedule_callback(callback: CallbackQuery, database_pool: Pool):
-    day = datetime.now()
+    day = datetime.today()
     if callback.data == 'tomorrow_schedule':
         day += timedelta(days=1)
     raw = await get_daily_schedule(database_pool, day)

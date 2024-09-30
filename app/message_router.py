@@ -28,13 +28,13 @@ async def handle_start_message(message: Message):
     return
 
 
-@message_router.message(F.text == 'распес')
-@message_router.message(F.text == 'расписание')
+@message_router.message(F.text.lower() == 'распес')
+@message_router.message(F.text.lower() == 'расписание')
 @message_router.message(Command('today'))
 @message_router.message(Command('tomorrow'))
 async def handle_flexible_schedule(message: Message, database_pool: Pool):
-    day = datetime.now()
-    if (message.text.startswith('/') and message.text == '/tomorrow') or \
+    day = datetime.today()
+    if message.text.startswith('/tomorrow') or \
             (not message.text.startswith('/') and day.hour > 18):
         day += timedelta(days=1)
     raw = await get_daily_schedule(database_pool, day)
