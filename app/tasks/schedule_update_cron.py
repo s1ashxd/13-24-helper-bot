@@ -40,7 +40,10 @@ async def schedule_update_cron(api_client: AsyncClient, redis: Redis, database_p
                 for comp in cal.walk('VEVENT'):
                     if comp.get('RRULE') is not None:
                         summary = str(comp.get('SUMMARY')).split(' ', 1)
-                        await cursor.execute('SELECT id FROM subjects WHERE name = %s LIMIT 1', (summary[1],))
+                        await cursor.execute(
+                            'SELECT id FROM subjects WHERE category = %s AND name = %s LIMIT 1',
+                            summary
+                        )
                         subject = await cursor.fetchone()
                         if subject is None:
                             desc = str(comp.get('DESCRIPTION')).strip()
